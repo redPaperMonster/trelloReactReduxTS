@@ -38,7 +38,7 @@ const ModalCreateCard: React.FC<ModalProps> = ({
         </CreateCardItemWrapper>
         <CreateCardItemWrapper>
           <Button
-            style="padding: 5px 20px"
+            customStyles="padding: 5px 20px"
             onClick={createAction}
             text="ok" />
         </CreateCardItemWrapper>

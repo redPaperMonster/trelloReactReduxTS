@@ -90,7 +90,7 @@ const ModalCardInfo: React.FC<ModalProps> = ({
           value={comment}
           onChange={(e) => setComment(e.currentTarget.value)}></CommentTextarea>
         <Button
-          style="padding: 10px 5px; margin-left: 5px;"
+          customStyles="padding: 10px 5px; margin-left: 5px;"
           onClick={addComment}
           text="save comment" />
       </SendCommentWrapper>

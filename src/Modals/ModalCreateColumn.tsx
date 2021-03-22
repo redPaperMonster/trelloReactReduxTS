@@ -45,7 +45,7 @@ const ModalCreateColumn: React.FC<ModalProps> = ({
                     </CreateColumnItemWrapper>
                     <CreateColumnItemWrapper>
                         <Button
-                            style="padding: 5px 20px"
+                            customStyles="padding: 5px 20px"
                             onClick={handleSubmit}
                             text="ok" />
                     </CreateColumnItemWrapper>
