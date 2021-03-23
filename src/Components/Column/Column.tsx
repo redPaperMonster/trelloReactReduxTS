@@ -1,9 +1,10 @@
 import Card from '../Card/Card';
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { CardType, ColumnType, CommentsType } from '../../App'
-import { TitleWrapper, TextDescr, Title, ColumnInfoWrapper, ColumnWrapper, ColumnButtonWrapper } from './columnStyles';
+import { ColumnInputWrapper, TextDescr, Title, ColumnInfoWrapper, ColumnWrapper, ColumnButtonWrapper } from './columnStyles';
 import { ModalCreateCard } from '../../Modals';
-import { Button, Input } from '..';
+import { Button, FormTextarea } from '..';
+import { Field, Form } from 'react-final-form';
 
 
 interface ColumnProps {
@@ -36,10 +37,12 @@ const Column: React.FC<ColumnProps> = ({
   handleDeleteComment,
   handleUpdateComment }) => {
 
-  const [redactedMode, setRedactedMode] = useState<boolean>(false);
+  const [isRedacted, setRedacted] = useState<boolean>(false);
   const [showCreateCardModal, setCreateCardModal] = useState<boolean>(false)
   const [updatedColumnTitle, setUpdatedColumnTitle] = useState<string>(column.title);
   const [updatedColumnDescription, setUpdatedColumnDescription] = useState<string>(column.description);
+
+  const required = (value: string) => (value ? undefined : "title shouldn't be empty")
 
   const handleSubmitCreate = (title: string, description: string) => {
     if (!!title) {
@@ -54,47 +57,52 @@ const Column: React.FC<ColumnProps> = ({
 
   const saveChanges = () => {
     if (!!updatedColumnTitle) {
-      setRedactedMode(false);
+      setRedacted(false);
       let newColumn: ColumnType = { id: column.id, title: updatedColumnTitle, description: updatedColumnDescription }
       handleUpdate(newColumn);
     }
   }
 
   const updateAction = () => {
-    redactedMode ? saveChanges() : setRedactedMode(true)
+    isRedacted ? saveChanges() : setRedacted(true)
   }
-
-  const columnDataShow = <TitleWrapper>
-    <Title>{column.title}</Title>
-    <TextDescr>{column.description}</TextDescr>
-  </TitleWrapper>
-
-  const columnDataRedact = <TitleWrapper>
-    <Input
-      value={updatedColumnTitle}
-      onChange={(e) => setUpdatedColumnTitle(e.currentTarget.value)}
-      customSize={10} />
-    <Input
-      value={updatedColumnDescription}
-      onChange={(e) => setUpdatedColumnDescription(e.currentTarget.value)}
-      customSize={10} />
-  </TitleWrapper>
-
-
 
   return (
     <div >
       <ColumnWrapper>
         <ColumnInfoWrapper>
-          {redactedMode ? columnDataRedact : columnDataShow}
-          <ColumnButtonWrapper>
-            <Button
-              customStyles="margin-bottom: 6px;"
-              onClick={updateAction}
-              text={redactedMode ? "💾" : "✎"} />
-            <Button onClick={() => handleDeleteColumn(column.id)}
-              text="🗑" />
-          </ColumnButtonWrapper>
+          <Form
+            onSubmit={updateAction}
+            initialValues={{ title: updatedColumnTitle, description: updatedColumnDescription }}>
+            {props => (
+              <form >
+                <ColumnInputWrapper>
+                  <Field
+                    name="title"
+                    customSize={10}
+                    validate={required}
+                    disabled={!isRedacted}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setUpdatedColumnTitle(e.currentTarget.value)}
+                    component={FormTextarea} />
+                  <Field
+                    name="description"
+                    customSize={10}
+                    disabled={!isRedacted}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setUpdatedColumnDescription(e.currentTarget.value)}
+                    component={FormTextarea} />
+                </ColumnInputWrapper>
+                <ColumnButtonWrapper>
+                  <Button
+                    customStyles="margin-bottom: 6px;"
+                    onClick={props.handleSubmit}
+                    text={isRedacted ? "💾" : "✎"} />
+                  <Button onClick={() => handleDeleteColumn(column.id)}
+                    text="🗑" />
+                </ColumnButtonWrapper>
+              </form>
+            )}
+          </Form>
+
         </ColumnInfoWrapper>
         {
           cards.map((card: CardType) => {

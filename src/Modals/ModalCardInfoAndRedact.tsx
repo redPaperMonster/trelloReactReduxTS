@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
+import { Field, Form } from 'react-final-form';
 import { CardType, CommentsType } from '../App';
-import { Modal, Button, Input, CommentItem } from '../Components';
+import { Modal, Button, FormTextarea, CommentItem, FormInput } from '../Components';
 import { CardDescr, CardInfoWrapper, CardInputWrapper, CardModalDescr, CardRedactWrapper, CardTitle, CommentsWrapper, CommentTextarea, SendCommentWrapper } from './ModalsStyles';
 
 interface ModalProps {
@@ -15,6 +16,10 @@ interface ModalProps {
   handleAddComment: (cardId: string, text: string) => void,
   handleDeleteComment: (id: string) => void,
   handleUpdateComment: (updatedComment: CommentsType) => void
+}
+
+interface Values {
+  text: string
 }
 const ModalCardInfo: React.FC<ModalProps> = ({
   isOpen,
@@ -33,9 +38,12 @@ const ModalCardInfo: React.FC<ModalProps> = ({
   const [description, setDescription] = useState<string>(card.description);
   const [comment, setComment] = useState<string>('')
 
-  const addComment = () => {
-    handleAddComment(card.id, comment);
-    setComment('');
+  const required = (value: string) => (value ? undefined : "title shouldn't be empty")
+  const commentRequired = (value: string) => (value ? undefined : "enter comments text")
+
+  const addComment = (values: Values) => {
+    handleAddComment(card.id, values.text);
+    setComment(' ');
   }
 
   const saveChanges = () => {
@@ -53,24 +61,37 @@ const ModalCardInfo: React.FC<ModalProps> = ({
     <CardDescr>Card description: {card.description}</CardDescr>
   </CardInfoWrapper>
 
-  const redactFields = <CardRedactWrapper>
-    <CardInputWrapper>
-      <Input
-        value={title}
-        onChange={(e) => setTitle(e.currentTarget.value)} />
-    </CardInputWrapper>
-    <CardInputWrapper>
-      <Input
-        value={description}
-        onChange={(e) => setDescription(e.currentTarget.value)} />
-    </CardInputWrapper>
-  </CardRedactWrapper>
-
   return (
     <Modal
       isOpen={isOpen}
       close={close}>
-      {isRedacted ? redactFields : information}
+      <CardRedactWrapper>
+        <Form
+          onSubmit={() => { }}
+          initialValues={{ title: title, description: description }}>
+          {props => (
+            <form >
+              <label>card title</label>
+              <Field
+                name="title"
+                customSize={10}
+                disabled={!isRedacted}
+                customStyle="&:disabled {background-color: white;}; "
+                validate={required}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)}
+                component={FormTextarea} />
+              <label>card description</label>
+              <Field
+                name="description"
+                disabled={!isRedacted}
+                customStyle="&:disabled {background-color: white;}; "
+                customSize={10}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.currentTarget.value)}
+                component={FormTextarea} />
+            </form>
+          )}
+        </Form>
+      </CardRedactWrapper >
       <Button
         onClick={updateAction}
         text={isRedacted ? "💾" : "✎"} />
@@ -85,14 +106,24 @@ const ModalCardInfo: React.FC<ModalProps> = ({
         })}
       </CommentsWrapper>
       <SendCommentWrapper>
-        <CommentTextarea
-          autoFocus
-          value={comment}
-          onChange={(e) => setComment(e.currentTarget.value)}></CommentTextarea>
-        <Button
-          customStyles="padding: 10px 5px; margin-left: 5px;"
-          onClick={addComment}
-          text="save comment" />
+        <Form
+          onSubmit={addComment}
+          initialValues={{ text: comment }}>
+          {props => (
+            <form>
+              <Field
+                value={comment}
+                name="text"
+                validate={commentRequired}
+                component={FormInput}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setComment(e.currentTarget.value)} />
+              <Button
+                customStyles="padding: 10px 5px; margin-left: 5px;"
+                onClick={props.handleSubmit}
+                text="save comment" />
+            </form>
+          )}
+        </Form>
       </SendCommentWrapper>
     </Modal>
   )

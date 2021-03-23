@@ -19,8 +19,7 @@ const ModalRegistration: React.FC<ModalProps> = ({
     const handleSubmit = (values: Values) => {
         handleNameEnterSubmit(values.userName)
     }
-    const required = (value: string) => (value ? undefined : 'Required')
-
+    const required = (value: string) => (value ? undefined : "you didn't enter your name!")
 
     return (
         <Modal

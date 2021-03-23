@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { CommentsType } from '../../App';
 import { CommentItemWrapper, CommentAuthor, CommentText, CommentInfoWrapper, ButtonWrapper } from './CommentsStyles';
-import { Button, Input } from ".."
+import { Button, FormTextarea, Input } from ".."
+import { Field, Form } from 'react-final-form';
 
 interface CommentProps {
     comment: CommentsType,
@@ -15,42 +16,56 @@ const CommentItem: React.FC<CommentProps> = ({
     handleDeleteComment,
     handleUpdateComment }) => {
 
-    const [isEditable, setEditable] = useState<boolean>(false)
-    const [commentText, setcommentText] = useState<string>(comment.text)
+    const [isRedacted, setRedacted] = useState<boolean>(false)
+    const [commentText, setCommentText] = useState<string>(comment.text)
+    const required = (value: string) => (value ? undefined : "enter comments text")
 
     const saveChanges = () => {
         handleUpdateComment({ id: comment.id, cardId: comment.cardId, text: commentText, author: comment.author })
-        setEditable(false)
+        setRedacted(false)
     }
 
     const handleOnClick = () => {
-        isEditable ? saveChanges() : setEditable(true)
+        isRedacted ? saveChanges() : setRedacted(true)
     }
 
-    const commentInfo = <CommentInfoWrapper>
-        <CommentAuthor>{comment.author}:</CommentAuthor>
-        <CommentText>{comment.text}</CommentText>
-    </CommentInfoWrapper>
-    const commentRedact = <CommentInfoWrapper>
-        <CommentAuthor>{comment.author}:</CommentAuthor>
-        <Input
-            value={commentText}
-            onChange={e => setcommentText(e.currentTarget.value)} />
-    </CommentInfoWrapper>
-
     return (
-        <CommentItemWrapper>
-            {isEditable ? commentRedact : commentInfo}
-            <ButtonWrapper>
-                <Button
-                    customStyles="margin-right: 5px;"
-                    onClick={handleOnClick}
-                    text={isEditable ? '💾' : '✎'} />
-                <Button
-                    onClick={() => handleDeleteComment(comment.id)}
-                    text="🗑" />
-            </ButtonWrapper>
-        </CommentItemWrapper>
+        <Form
+            onSubmit={handleOnClick}
+            initialValues={{ text: commentText }}>
+            {props => (
+                <form>
+                    <CommentItemWrapper>
+                        <CommentInfoWrapper>
+                            <label>{comment.author}:</label>
+                            <Field name="text"
+                                customSize={10}
+                                customStyle="
+                            min-width:350px; 
+                            &:disabled {
+                                background-color:white; 
+                                min-width:350px;
+                                text-align: start;};  "
+                                validate={required}
+                                disabled={!isRedacted}
+                                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setCommentText(e.currentTarget.value)}
+                                component={FormTextarea} />
+                        </CommentInfoWrapper>
+                        <ButtonWrapper>
+                            <Button
+                                customStyles="margin-right: 5px;"
+                                onClick={props.handleSubmit}
+                                text={isRedacted ? '💾' : '✎'} />
+                            <Button
+                                onClick={() => handleDeleteComment(comment.id)}
+                                text="🗑" />
+                        </ButtonWrapper></CommentItemWrapper>
+                </form>
+            )}
+        </Form>
+
+
+
     )
 }
 

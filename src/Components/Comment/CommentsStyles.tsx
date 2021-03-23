@@ -9,12 +9,15 @@ cursor: pointer;
 background-color: #fff;
 display:flex;
 flex-flow: row no-wrap;
-justify-content: space-between;`
+justify-content: space-between`
 
 export const CommentInfoWrapper = styled.div`
-`
+display:flex;
+flex-flow: row no-wrap;
+justify-content: flex-start`
 
-export const ButtonWrapper = styled.div``
+export const ButtonWrapper = styled.div`
+`
 
 export const CommentAuthor = styled.span`
 margin-right: 50px;

@@ -15,7 +15,6 @@ const Header: React.FC<HeaderProps> = ({
     text,
     deleteName }) => {
 
-
     return (
         <HeaderWrapper>
             <HeaderTitle>Welcome, {userName}</HeaderTitle>
@@ -25,6 +24,7 @@ const Header: React.FC<HeaderProps> = ({
                     onClick={onClick}
                     text={text} />
                 <Button
+                    customStyles="margin-right: 15px;"
                     text="delete user name"
                     onClick={deleteName} />
             </div>

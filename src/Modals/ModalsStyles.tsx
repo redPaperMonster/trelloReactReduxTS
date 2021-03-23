@@ -46,6 +46,7 @@ word-break: break-all;
 margin: 0;`;
 
 export const CommentsWrapper = styled.div`
+
 max-height: 300px;
 overflow-y: auto;`
 

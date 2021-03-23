@@ -1,7 +1,8 @@
 
 import React from 'react'
+import { Field, Form } from 'react-final-form';
 import { ColumnType } from '../App'
-import { Modal, Button, Input } from '../Components'
+import { Modal, Button, FormInput } from '../Components'
 import { ModalTitle } from './ModalsStyles';
 import { CreateColumnItemWrapper, CreateColumnWrapper } from './ModalsStyles'
 interface ModalProps {
@@ -9,6 +10,11 @@ interface ModalProps {
     close: () => void,
     handleAddColumn: (column: ColumnType) => void
 }
+export interface Values {
+    title: string,
+    description: string
+}
+const required = (value: string) => (value ? undefined : "title shouldn't be empty")
 
 const ModalCreateColumn: React.FC<ModalProps> = ({
     isOpen,
@@ -17,41 +23,47 @@ const ModalCreateColumn: React.FC<ModalProps> = ({
 
     let newColumnName: string, newColumnDescription: string
 
-    const handleSubmit = () => {
-        if (!!newColumnName) {
-            let newColumn: ColumnType = {
-                id: `${new Date().getTime()}-${newColumnName}`,
-                title: newColumnName, description: newColumnDescription
-            };
-            handleAddColumn(newColumn);
-            close();
-        }
-
+    const handleSubmit = (values: Values) => {
+        let newColumn: ColumnType = {
+            id: `${new Date().getTime()}-${newColumnName}`,
+            title: values.title, description: values.description
+        };
+        handleAddColumn(newColumn);
+        close();
     }
+
     return (
         <div>
             <Modal isOpen={isOpen} close={close}>
-                <CreateColumnWrapper>
-                    <ModalTitle>Enter column name</ModalTitle>
-                    <div>
-                        <Input
-                            focused
-                            onChange={e => { newColumnName = e.currentTarget.value }} />
-                    </div>
-                    <ModalTitle>Enter column description</ModalTitle>
-                    <CreateColumnItemWrapper>
-                        <Input
-                            onChange={e => { newColumnDescription = e.currentTarget.value }} />
-                    </CreateColumnItemWrapper>
-                    <CreateColumnItemWrapper>
-                        <Button
-                            customStyles="padding: 5px 20px"
-                            onClick={handleSubmit}
-                            text="ok" />
-                    </CreateColumnItemWrapper>
-                </CreateColumnWrapper>
+                <Form onSubmit={handleSubmit}>
+                    {props => (
+                        <form>
+                            <CreateColumnWrapper>
+                                <ModalTitle>Enter column title</ModalTitle>
+                                <div>
+                                    <Field
+                                        focused
+                                        name="title"
+                                        validate={required}
+                                        component={FormInput} />
+                                </div>
+                                <ModalTitle>Enter column description</ModalTitle>
+                                <CreateColumnItemWrapper>
+                                    <Field
+                                        name="description"
+                                        component={FormInput} />
+                                </CreateColumnItemWrapper>
+                                <CreateColumnItemWrapper>
+                                    <Button
+                                        customStyles="padding: 5px 20px"
+                                        onClick={props.handleSubmit}
+                                        text="ok" />
+                                </CreateColumnItemWrapper>
+                            </CreateColumnWrapper>
+                        </form>)}
+                </Form>
             </Modal>
-        </div>
+        </div >
     )
 }
 

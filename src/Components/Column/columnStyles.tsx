@@ -7,12 +7,19 @@ width: 200px`
 
 export const ColumnInfoWrapper = styled.div`
 display: flex;
+flex-flow: row no-wrap;
 justify-content: space-between;`;
+
+export const ColumnInputWrapper = styled.div`
+display: flex;
+flex-flow: column wrap;
+justify-content: flex-start;`;
 
 export const ColumnButtonWrapper = styled.div`
 display: flex;
 flex-flow: column wrap;
 align-content: flex-end;
+justify-content: center;
 `
 
 export const Title = styled.h1`
@@ -28,7 +35,8 @@ word-break: break-all;`;
 
 export const TitleWrapper = styled.div`
 display: flex;
-flex-flow: column wrap;`;
+flex-flow: column wrap;
+margin:5px;`;
 
 
 

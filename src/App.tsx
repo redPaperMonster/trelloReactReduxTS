@@ -3,6 +3,14 @@ import { useState, useEffect } from 'react'
 import { Column, Header } from './Components/';
 import { ModalRegistration, ModalCreateColumn } from './Modals';
 import { Board } from "./AppStyles";
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  updateColumn,
+  selectColumns,
+  addColumn,
+  deleteColumn
+} from './Store/columnSlice';
+
 
 export type ColumnType = {
   id: string,
@@ -25,20 +33,15 @@ export type CommentsType = {
 }
 
 export type DataStoreType = {
-  columns: Array<ColumnType>
+  //columns: Array<ColumnType>
   cards: Array<CardType>
   comments: Array<CommentsType>
 }
 
 function App() {
   const initialStore: DataStoreType = {
-    columns: [
-      { id: `${new Date().getTime()}-TODO`, title: "TODO", description: "TODO column" },
-      { id: `${new Date().getTime()}-In Progress`, title: "In Progress", description: "in progress column" },
-      { id: `${new Date().getTime()}-Testing`, title: "Testing", description: "testing column" },
-      { id: `${new Date().getTime()}-Done`, title: "Done", description: "done column" }],
 
-    cards: [],
+    cards: [{ id: "123", columnId: "1234-TODO", title: "some", description: "dsdf" }],
 
     comments: []
   }
@@ -47,6 +50,9 @@ function App() {
   const [showCreateColumnModal, setCreateColumnModal] = useState<boolean>(false)
   const [userName, setUserName] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
+
+  const dispatch = useDispatch();
+  const columns: Array<ColumnType> = useSelector(selectColumns);
 
   useEffect(() => {
     checkUserName();
@@ -63,32 +69,30 @@ function App() {
     setUserName("");
   }
 
-  const handleAddColumn = (newColumn: ColumnType) => {
-    setDataStore({ ...dataStore, columns: [...dataStore.columns, newColumn] })
+  const handleAddColumn = (column: ColumnType) => {
+    //console.log(`column`, column)
+    dispatch(addColumn(column));
+    //setDataStore({ ...dataStore, columns: [...dataStore.columns, newColumn] })
   }
 
   const handleDeleteColumn = (id: string) => {
-    const newColumns = dataStore.columns.filter(
-      (item: ColumnType) => item.id !== id);
-    const newCards = dataStore.cards.filter(
-      (item: CardType) => item.columnId !== id);
-    const newCardsIds = newCards.map(
-      (i: CardType) => { return i.id })
-    const newComments = dataStore.comments.filter(
-      (i: CommentsType) => {
-        return newCardsIds.includes(i.cardId)
-      })
-    setDataStore({ ...dataStore, columns: newColumns, cards: newCards, comments: newComments })
+    dispatch(deleteColumn(id));
+    // const newColumns = dataStore.columns.filter(
+    //   (item: ColumnType) => item.id !== id);
+    // const newCards = dataStore.cards.filter(
+    //   (item: CardType) => item.columnId !== id);
+    // const newCardsIds = newCards.map(
+    //   (i: CardType) => { return i.id })
+    // const newComments = dataStore.comments.filter(
+    //   (i: CommentsType) => {
+    //     return newCardsIds.includes(i.cardId)
+    //   })
+    // setDataStore({ ...dataStore, columns: newColumns, cards: newCards, comments: newComments })
   }
 
   const handleUpdateColumn = (column: ColumnType) => {
-    let newColumns = dataStore.columns.map((item: ColumnType) => {
-      if (column.id === item.id) {
-        return column
-      }
-      return item
-    })
-    setDataStore({ ...dataStore, columns: newColumns })
+    dispatch(updateColumn(column));
+
   }
 
   const handleAddCard = (newCard: CardType) => {
@@ -150,12 +154,13 @@ function App() {
         userName={userName}
         onClick={() => setCreateColumnModal(true)}
         text="+ create column" />
+
       <Board>
         <ModalRegistration
           isOpen={!userName}
           handleNameEnterSubmit={handleSaveUsername} />
 
-        {dataStore.columns.map((item: ColumnType) => {
+        {columns.map((item: ColumnType) => {
           const columnCards =
             dataStore.cards.filter((i: CardType) => i.columnId === item.id);
           return (
@@ -173,13 +178,12 @@ function App() {
               handleDeleteComment={handleDeleteComment}
               handleUpdateComment={handleUpdateComment} />)
         })}
-
         <ModalCreateColumn
           isOpen={showCreateColumnModal}
           close={() => setCreateColumnModal(false)}
           handleAddColumn={handleAddColumn} />
       </Board>
-    </div>
+    </div >
 
   )
 }
