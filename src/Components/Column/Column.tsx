@@ -1,16 +1,14 @@
 import Card from '../Card/Card';
 import React, { ChangeEvent, useState } from 'react'
-import { CardType, ColumnType, CommentsType } from '../../App'
-import { ColumnInputWrapper, TextDescr, Title, ColumnInfoWrapper, ColumnWrapper, ColumnButtonWrapper } from './columnStyles';
+import { ColumnInputWrapper, ColumnInfoWrapper, ColumnWrapper, ColumnButtonWrapper } from './columnStyles';
 import { ModalCreateCard } from '../../Modals';
 import { Button, FormTextarea } from '..';
 import { Field, Form } from 'react-final-form';
-
-
+import { CardType, ColumnType, CommentType } from '../../Store/store';
 interface ColumnProps {
   column: ColumnType,
   cards: Array<CardType>,
-  comments: Array<CommentsType>,
+  comments: Array<CommentType>,
   userName: string,
   handleDeleteColumn: (id: string) => void,
   handleUpdate: (column: ColumnType) => void,
@@ -19,9 +17,8 @@ interface ColumnProps {
   handleUpdateCard: (updatedCard: CardType) => void,
   handleAddComment: (cardId: string, text: string) => void,
   handleDeleteComment: (id: string) => void,
-  handleUpdateComment: (updatedComment: CommentsType) => void
+  handleUpdateComment: (updatedComment: CommentType) => void
 }
-
 
 const Column: React.FC<ColumnProps> = ({
   column,
@@ -106,7 +103,7 @@ const Column: React.FC<ColumnProps> = ({
         </ColumnInfoWrapper>
         {
           cards.map((card: CardType) => {
-            const commsForCard = comments.filter((i: CommentsType) => i.cardId === card.id);
+            const commsForCard = comments.filter((i: CommentType) => i.cardId === card.id);
             return <Card
               key={card.id}
               card={card}

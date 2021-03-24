@@ -5,15 +5,13 @@ import { HeaderTitle, HeaderWrapper } from './HeaderStyles';
 interface HeaderProps {
     userName: string,
     onClick: () => void,
-    text: string,
-    deleteName: () => void
+    text: string
 }
 
 const Header: React.FC<HeaderProps> = ({
     userName,
     onClick,
-    text,
-    deleteName }) => {
+    text }) => {
 
     return (
         <HeaderWrapper>
@@ -25,8 +23,8 @@ const Header: React.FC<HeaderProps> = ({
                     text={text} />
                 <Button
                     customStyles="margin-right: 15px;"
-                    text="delete user name"
-                    onClick={deleteName} />
+                    text="clear local storage"
+                    onClick={() => localStorage.clear()} />
             </div>
         </HeaderWrapper>
     )

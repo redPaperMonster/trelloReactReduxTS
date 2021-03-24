@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { useState } from 'react'
-import { CardType, CommentsType } from '../../App'
 import { CardWrapper, CardTitle, CardItem, CardButtonWpapper } from './cardsStyles';
 import { ModalCardInfo } from '../../Modals';
 import { Button } from '..';
+import { CardType, CommentType } from '../../Store';
 
 interface CardProps {
   card: CardType,
-  comments: Array<CommentsType>,
+  comments: Array<CommentType>,
   columnTitle: string,
   userName: string,
   handleDeleteCard: (id: string) => void,
   handleUpdateCard: (updatedCard: CardType) => void,
   handleAddComment: (cardId: string, text: string) => void,
   handleDeleteComment: (id: string) => void,
-  handleUpdateComment: (updatedComment: CommentsType) => void
+  handleUpdateComment: (updatedComment: CommentType) => void
 }
 
 const Card: React.FC<CardProps> = ({

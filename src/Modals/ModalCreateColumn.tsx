@@ -1,8 +1,8 @@
 
 import React from 'react'
 import { Field, Form } from 'react-final-form';
-import { ColumnType } from '../App'
 import { Modal, Button, FormInput } from '../Components'
+import { ColumnType } from '../Store/store';
 import { ModalTitle } from './ModalsStyles';
 import { CreateColumnItemWrapper, CreateColumnWrapper } from './ModalsStyles'
 interface ModalProps {

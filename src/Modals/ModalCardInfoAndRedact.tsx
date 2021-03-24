@@ -1,21 +1,21 @@
 
 import React, { ChangeEvent, useState } from 'react'
 import { Field, Form } from 'react-final-form';
-import { CardType, CommentsType } from '../App';
 import { Modal, Button, FormTextarea, CommentItem, FormInput } from '../Components';
-import { CardDescr, CardInfoWrapper, CardInputWrapper, CardModalDescr, CardRedactWrapper, CardTitle, CommentsWrapper, CommentTextarea, SendCommentWrapper } from './ModalsStyles';
+import { CardType, CommentType } from '../Store';
+import { CardDescr, CardInfoWrapper, CardInputWrapper, CardModalDescr, CardRedactWrapper, CardTitle, CommentsWrapper, SendCommentWrapper } from './ModalsStyles';
 
 interface ModalProps {
   isOpen: boolean,
   columnTitle: string,
   close: () => void,
   card: CardType,
-  comments: Array<CommentsType>,
+  comments: Array<CommentType>,
   userName: string,
   handleUpdateCard: (updatedCard: CardType) => void,
   handleAddComment: (cardId: string, text: string) => void,
   handleDeleteComment: (id: string) => void,
-  handleUpdateComment: (updatedComment: CommentsType) => void
+  handleUpdateComment: (updatedComment: CommentType) => void
 }
 
 interface Values {
@@ -97,7 +97,7 @@ const ModalCardInfo: React.FC<ModalProps> = ({
         text={isRedacted ? "💾" : "✎"} />
       <CardModalDescr>Column: {columnTitle}, Author: {userName}</CardModalDescr>
       <CommentsWrapper>
-        {comments.map((i: CommentsType) => {
+        {comments.map((i: CommentType) => {
           return <CommentItem
             comment={i}
             key={i.id}

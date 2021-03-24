@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { ChangeEvent, useState } from 'react'
-import { CommentsType } from '../../App';
-import { CommentItemWrapper, CommentAuthor, CommentText, CommentInfoWrapper, ButtonWrapper } from './CommentsStyles';
-import { Button, FormTextarea, Input } from ".."
+import { CommentItemWrapper, CommentInfoWrapper, ButtonWrapper } from './CommentsStyles';
+import { Button, FormTextarea } from ".."
 import { Field, Form } from 'react-final-form';
+import { CommentType } from '../../Store';
 
 interface CommentProps {
-    comment: CommentsType,
+    comment: CommentType,
     handleDeleteComment: (id: string) => void,
-    handleUpdateComment: (updatedComment: CommentsType) => void
+    handleUpdateComment: (updatedComment: CommentType) => void
 }
 
 const CommentItem: React.FC<CommentProps> = ({
