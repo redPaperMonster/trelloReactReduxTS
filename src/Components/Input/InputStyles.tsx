@@ -17,6 +17,7 @@ justify-content: center`
 export const StyledTextarea = styled.textarea<TextareaStyleProps>`
 max-width: 150px;
 max-height: 150px;
+text-align: center;
 font-weight: bold;
 color: black;
 font-size: 1.2em;
@@ -30,13 +31,5 @@ word-break: break-word;
      text-align: center;
 
 }
- ${(props) => props.customStyleDisabled};
+ ${(props) => props.customStyle};
 `
-
-//     &: invalid {
-//         border: 2px dashed red;
-// }
-
-// &: valid {
-//     border: 2px solid lime;
-// }

@@ -1,23 +1,24 @@
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Modal, FormInput } from '../Components';
 import { Form, Field } from 'react-final-form'
+import { useDispatch } from 'react-redux';
+import { userActions } from '../Store';
 
 interface ModalProps {
-    isOpen: boolean,
-    handleNameEnterSubmit: (name: string) => void
+    isOpen: boolean
 }
-
 interface Values {
     userName: string
 }
 
 const ModalRegistration: React.FC<ModalProps> = ({
-    isOpen,
-    handleNameEnterSubmit }) => {
+    isOpen }) => {
+
+    const dispatch = useDispatch();
 
     const handleSubmit = (values: Values) => {
-        handleNameEnterSubmit(values.userName)
+        dispatch(userActions.setUserName(values.userName))
     }
     const required = (value: string) => (value ? undefined : "you didn't enter your name!")
 

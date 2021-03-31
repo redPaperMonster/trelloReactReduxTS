@@ -5,8 +5,7 @@ interface ButtonProps {
   onClick: () => void,
   text: string,
   customStyles?: string,
-  submit?: boolean,
-  form?: string
+  submit?: boolean
 }
 
 type ButtonStyleProps = {
@@ -28,14 +27,13 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   text,
   customStyles,
-  submit, form }) => {
-  const buttonForm = form || "";
+  submit }) => {
+
   return (
     <CommonButton
       customStyle={customStyles || ""}
       onClick={onClick}
-      type={submit ? "submit" : "button"}
-      form={buttonForm}>{text}</CommonButton>
+      type={submit ? "submit" : "button"}>{text}</CommonButton>
   )
 }
 

@@ -24,7 +24,7 @@ color: black;
 border: none;
 border-radius: 3px;`;
 
-export const CardButtonWpapper = styled.div`
+export const CardButtonWrapper = styled.div`
 width: 30px;
 height: 30px;
 top: 0;

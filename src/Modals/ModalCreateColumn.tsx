@@ -1,34 +1,35 @@
 
+import { nanoid } from '@reduxjs/toolkit';
 import React from 'react'
 import { Field, Form } from 'react-final-form';
+import { useDispatch } from 'react-redux';
 import { Modal, Button, FormInput } from '../Components'
-import { ColumnType } from '../Store/store';
-import { ModalTitle } from './ModalsStyles';
-import { CreateColumnItemWrapper, CreateColumnWrapper } from './ModalsStyles'
+import { columnActions, ColumnType } from '../Store';
+import { ModalTitle, CreateColumnItemWrapper, CreateColumnWrapper } from './ModalsStyles'
 interface ModalProps {
     isOpen: boolean,
-    close: () => void,
-    handleAddColumn: (column: ColumnType) => void
+    close: () => void
 }
 export interface Values {
     title: string,
     description: string
 }
-const required = (value: string) => (value ? undefined : "title shouldn't be empty")
+
 
 const ModalCreateColumn: React.FC<ModalProps> = ({
     isOpen,
-    close,
-    handleAddColumn }) => {
+    close }) => {
 
-    let newColumnName: string, newColumnDescription: string
+    const dispatch = useDispatch();
+
+    const required = (value: string) => (value ? undefined : "title shouldn't be empty")
 
     const handleSubmit = (values: Values) => {
         let newColumn: ColumnType = {
-            id: `${new Date().getTime()}-${newColumnName}`,
+            id: nanoid(),
             title: values.title, description: values.description
         };
-        handleAddColumn(newColumn);
+        dispatch(columnActions.addColumn(newColumn));
         close();
     }
 
@@ -36,13 +37,12 @@ const ModalCreateColumn: React.FC<ModalProps> = ({
         <div>
             <Modal isOpen={isOpen} close={close}>
                 <Form onSubmit={handleSubmit}>
-                    {props => (
+                    {({ handleSubmit }) => (
                         <form>
                             <CreateColumnWrapper>
                                 <ModalTitle>Enter column title</ModalTitle>
                                 <div>
                                     <Field
-                                        focused
                                         name="title"
                                         validate={required}
                                         component={FormInput} />
@@ -56,7 +56,7 @@ const ModalCreateColumn: React.FC<ModalProps> = ({
                                 <CreateColumnItemWrapper>
                                     <Button
                                         customStyles="padding: 5px 20px"
-                                        onClick={props.handleSubmit}
+                                        onClick={handleSubmit}
                                         text="ok" />
                                 </CreateColumnItemWrapper>
                             </CreateColumnWrapper>

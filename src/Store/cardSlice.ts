@@ -1,10 +1,10 @@
-import { selectComments } from './';
-import { createSlice, current } from '@reduxjs/toolkit';
-import { ColumnType, RootState, CardDataType } from '.';
+import { columnActions } from './columnSlice';
+import { createSlice } from '@reduxjs/toolkit';
+import { CardDataType } from '.';
+import { CardType } from './store';
 
 const initialState: CardDataType = {
-    data: [
-        { id: `11`, columnId: `1234-TODO`, title: "TODO from store", description: "TODO column" }]
+    data: []
 }
 
 export const cardSlice = createSlice({
@@ -12,26 +12,32 @@ export const cardSlice = createSlice({
     initialState,
     reducers: {
         updateCard: (state, action) => {
-            const newData = state.data.map((i: ColumnType) => {
+            state.data = state.data.map((i: CardType) => {
                 if (i.id === action.payload.id) {
                     return action.payload;
                 }
                 return i;
             })
-            return { ...state, data: newData }
-
         },
         addCard: (state, action) => {
-            return { ...state, data: [...state.data, action.payload] }
+            state.data.push(action.payload);
         },
         deleteCard: (state, action) => {
-            return { ...state, data: [...state.data.filter((i: ColumnType) => i.id !== action.payload)] }
+            state.data = state.data.filter((i: CardType) => i.id !== action.payload)
         },
+        deleteCardByColumnId: (state, action) => {
+            state.data = state.data.filter((i: CardType) => i.columnId !== action.payload)
+        }
     },
+    extraReducers: {
+        [columnActions.deleteColumn.type]: (state, action) => {
+            state.data = state.data.filter((i: CardType) => i.columnId !== action.payload)
+        },
+        [columnActions.deleteColumn.type]: (state, action) => {
+            cardSlice.caseReducers.deleteCardByColumnId(state, action)
+        },
+    }
 });
-
-export const { updateCard, addCard, deleteCard } = cardSlice.actions;
-
-export const selectCards = (state: RootState) => state.cards.data;
+export const cardActions = cardSlice.actions;
 
 export default cardSlice.reducer;

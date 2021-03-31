@@ -5,27 +5,25 @@ export type {
     CardDataType,
     CommentType,
     CommentDataType,
-    RootState
+    RootState,
+
 } from "./store"
 
 export {
-    updateColumn,
-    addColumn,
-    deleteColumn,
-    selectColumns
+    columnActions
 } from "./columnSlice"
 
 export {
-    updateCard,
-    addCard,
-    deleteCard,
-    selectCards
+    cardActions
 } from "./cardSlice"
 
 
 export {
-    updateComment,
-    addComment,
-    deleteComment,
-    selectComments
+    commentActions
 } from "./commentSlice"
+
+export {
+    userActions
+} from "./userSlice"
+
+export { stateSelectors } from "./selectors"

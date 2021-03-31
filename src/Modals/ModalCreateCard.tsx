@@ -1,39 +1,48 @@
 
 import React from 'react'
-import { ModalTitle } from './ModalsStyles';
-import { Modal, Button, Input, FormInput } from '../Components';
-import { CreateCardItemWrapper, CreateCardWrapper } from './ModalsStyles';
+import { Modal, Button, FormInput } from '../Components';
+import { CreateCardItemWrapper, CreateCardWrapper, ModalTitle } from './ModalsStyles';
 import { Values } from './ModalCreateColumn';
 import { Field, Form } from 'react-final-form';
+import { CardType, cardActions } from '../Store';
+import { useDispatch } from 'react-redux';
+import { nanoid } from '@reduxjs/toolkit';
 
 interface ModalProps {
   isOpen: boolean,
   close: () => void,
-  handleSubmitCreate: (title: string, description: string) => void
+  columnId: string
 }
 
 const ModalCreateCard: React.FC<ModalProps> = ({
   isOpen,
   close,
-  handleSubmitCreate }) => {
+  columnId }) => {
 
   const required = (value: string) => (value ? undefined : "title shouldn't be empty")
+  const dispatch = useDispatch();
 
   const handleSubmit = (values: Values) => {
-    handleSubmitCreate(values.title, values.description)
+    let newCard: CardType = {
+      id: nanoid(), columnId: columnId,
+      title: values.title, description: values.description
+    };
+    dispatch(cardActions.addCard(newCard));
+    close();
   }
+
   return (
     <Modal
       isOpen={isOpen}
       close={close}>
       <Form onSubmit={handleSubmit}>
-        {props => (
+        {({ handleSubmit }) => (
           <form>
             <CreateCardWrapper>
               <ModalTitle>Enter card title</ModalTitle>
               <CreateCardItemWrapper>
                 <Field
-                  focused
+
                   name="title"
                   validate={required}
                   component={FormInput} />
@@ -47,7 +56,7 @@ const ModalCreateCard: React.FC<ModalProps> = ({
               <CreateCardItemWrapper>
                 <Button
                   customStyles="padding: 5px 20px"
-                  onClick={props.handleSubmit}
+                  onClick={handleSubmit}
                   text="ok" />
               </CreateCardItemWrapper>
             </CreateCardWrapper>

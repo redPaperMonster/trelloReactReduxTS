@@ -1,65 +1,63 @@
 
-import React, { ChangeEvent, useState } from 'react'
+import React, { useState } from 'react'
 import { Field, Form } from 'react-final-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button, FormTextarea, CommentItem, FormInput } from '../Components';
-import { CardType, CommentType } from '../Store';
-import { CardDescr, CardInfoWrapper, CardInputWrapper, CardModalDescr, CardRedactWrapper, CardTitle, CommentsWrapper, SendCommentWrapper } from './ModalsStyles';
+import { cardActions, CardType, commentActions, CommentType, stateSelectors } from '../Store';
+import { CardModalDescr, CardRedactWrapper, CommentsWrapper, SendCommentWrapper } from './ModalsStyles';
+import { nanoid } from '@reduxjs/toolkit';
 
 interface ModalProps {
   isOpen: boolean,
-  columnTitle: string,
   close: () => void,
   card: CardType,
-  comments: Array<CommentType>,
-  userName: string,
-  handleUpdateCard: (updatedCard: CardType) => void,
-  handleAddComment: (cardId: string, text: string) => void,
-  handleDeleteComment: (id: string) => void,
-  handleUpdateComment: (updatedComment: CommentType) => void
+  comments: Array<CommentType>
 }
 
 interface Values {
   text: string
 }
+interface CardValues {
+  title: string,
+  description: string
+}
 const ModalCardInfo: React.FC<ModalProps> = ({
   isOpen,
   close,
   card,
-  handleUpdateCard,
-  comments,
-  handleAddComment,
-  handleDeleteComment,
-  handleUpdateComment,
-  columnTitle,
-  userName }) => {
+  comments }) => {
 
   const [isRedacted, setIsRedacted] = useState<boolean>(false)
-  const [title, setTitle] = useState<string>(card.title);
-  const [description, setDescription] = useState<string>(card.description);
-  const [comment, setComment] = useState<string>('')
 
   const required = (value: string) => (value ? undefined : "title shouldn't be empty")
   const commentRequired = (value: string) => (value ? undefined : "enter comments text")
+  const dispatch = useDispatch();
+
+  const userName = useSelector(stateSelectors.getUserName());
+
+  const columnTitle = useSelector(stateSelectors.getColumnTitle(card.columnId));
 
   const addComment = (values: Values) => {
-    handleAddComment(card.id, values.text);
-    setComment(' ');
+    const newComment = {
+      id: nanoid(),
+      cardId: card.id, text: values.text,
+      author: userName
+    };
+    dispatch(commentActions.addComment(newComment))
   }
 
-  const saveChanges = () => {
-    if (!!title) {
-      setIsRedacted(false);
-      handleUpdateCard({ id: card.id, columnId: card.columnId, title: title, description: description });
+  const saveChanges = (values: CardValues) => {
+    setIsRedacted(false);
+    const newCard = {
+      id: card.id, columnId: card.columnId, title: values.title, description: values.description
     }
+    dispatch(cardActions.updateCard(newCard))
   }
 
-  const updateAction = () => {
-    isRedacted ? saveChanges() : setIsRedacted(true)
+  const updateAction = (values: CardValues) => {
+    isRedacted ? saveChanges(values) : setIsRedacted(true)
   }
-  const information = <CardInfoWrapper>
-    <CardTitle>Card Name: {card.title}</CardTitle>
-    <CardDescr>Card description: {card.description}</CardDescr>
-  </CardInfoWrapper>
+
 
   return (
     <Modal
@@ -67,9 +65,9 @@ const ModalCardInfo: React.FC<ModalProps> = ({
       close={close}>
       <CardRedactWrapper>
         <Form
-          onSubmit={() => { }}
-          initialValues={{ title: title, description: description }}>
-          {props => (
+          onSubmit={updateAction}
+          initialValues={{ title: card.title, description: card.description }}>
+          {({ handleSubmit }) => (
             <form >
               <label>card title</label>
               <Field
@@ -78,52 +76,50 @@ const ModalCardInfo: React.FC<ModalProps> = ({
                 disabled={!isRedacted}
                 customStyle="&:disabled {background-color: white;}; "
                 validate={required}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)}
                 component={FormTextarea} />
+
               <label>card description</label>
               <Field
                 name="description"
                 disabled={!isRedacted}
                 customStyle="&:disabled {background-color: white;}; "
                 customSize={10}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.currentTarget.value)}
                 component={FormTextarea} />
+              <Button
+                onClick={handleSubmit}
+                text={isRedacted ? "💾" : "✎"} />
             </form>
           )}
         </Form>
       </CardRedactWrapper >
-      <Button
-        onClick={updateAction}
-        text={isRedacted ? "💾" : "✎"} />
+
       <CardModalDescr>Column: {columnTitle}, Author: {userName}</CardModalDescr>
       <CommentsWrapper>
         {comments.map((i: CommentType) => {
           return <CommentItem
             comment={i}
-            key={i.id}
-            handleDeleteComment={handleDeleteComment}
-            handleUpdateComment={handleUpdateComment} />
+            key={i.id} />
         })}
       </CommentsWrapper>
       <SendCommentWrapper>
         <Form
           onSubmit={addComment}
-          initialValues={{ text: comment }}>
-          {props => (
+          render={({ handleSubmit, form }) => (
             <form>
               <Field
-                value={comment}
+
                 name="text"
                 validate={commentRequired}
-                component={FormInput}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setComment(e.currentTarget.value)} />
+                component={FormInput} />
               <Button
                 customStyles="padding: 10px 5px; margin-left: 5px;"
-                onClick={props.handleSubmit}
+                onClick={() => {
+                  handleSubmit();
+                  form.restart();
+                }}
                 text="save comment" />
             </form>
-          )}
-        </Form>
+          )} />
       </SendCommentWrapper>
     </Modal>
   )

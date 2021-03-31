@@ -7,7 +7,6 @@ interface InputProps
     extends FieldRenderProps<string> {
     meta: FieldMetaState<string>,
     input: FieldInputProps<string, HTMLElement>,
-    customSize?: number,
     onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void,
     focused?: boolean,
     disabled?: boolean,
@@ -15,22 +14,21 @@ interface InputProps
 }
 
 export type TextareaStyleProps = {
-    customStyleDisabled: string;
+    customStyle: string;
 };
 
 const FormTextarea: React.FC<InputProps> = ({
     meta,
     input,
-    customSize,
     onChange,
     focused,
     disabled,
     customStyle }) => {
-    const size: number = customSize || 20;
+
     return (
         <div><InputWrapper>
             <StyledTextarea
-                customStyleDisabled={customStyle || ""}
+                customStyle={customStyle || ""}
                 disabled={disabled}
                 value={input.value}
                 onChange={onChange !== undefined ? onChange : input.onChange}

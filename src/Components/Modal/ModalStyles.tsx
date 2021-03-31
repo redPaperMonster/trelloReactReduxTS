@@ -12,7 +12,8 @@ justify-content: center;
 transition: 0.5s;
 z-index: 100;
 pointer-events: all;
-text-align: center;`
+text-align: center;
+outline: none;`
 
 export const ModalContent = styled.div`
 

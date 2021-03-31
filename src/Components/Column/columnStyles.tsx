@@ -8,6 +8,12 @@ width: 200px`
 export const ColumnInfoWrapper = styled.div`
 display: flex;
 flex-flow: row no-wrap;
+justify-content: space-between;
+margin-top: 15px`;
+
+export const ColumnFormWrapper = styled.div`
+display: flex;
+flex-flow: row no-wrap;
 justify-content: space-between;`;
 
 export const ColumnInputWrapper = styled.div`
@@ -18,8 +24,8 @@ justify-content: flex-start;`;
 export const ColumnButtonWrapper = styled.div`
 display: flex;
 flex-flow: column wrap;
-align-content: flex-end;
-justify-content: center;
+margin-top: 5px;
+margin-left: 15px;
 `
 
 export const Title = styled.h1`

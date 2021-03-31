@@ -2,6 +2,8 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import columnReducer from './columnSlice';
 import cardReducer from './cardSlice';
 import commentReducer from './commentSlice';
+import userReducer from './userSlice';
+
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
@@ -19,16 +21,22 @@ const persistConfigComments = {
     key: 'commentsData',
     storage,
 }
+const persistConfigUserName = {
+    key: 'userName',
+    storage,
+}
 
 const persistedColumnReducer = persistReducer(persistConfigColumns, columnReducer);
 const persistedCardReducer = persistReducer(persistConfigCards, cardReducer);
 const persistedCommentReducer = persistReducer(persistConfigComments, commentReducer);
+const persistedUserReducer = persistReducer(persistConfigUserName, userReducer);
 
 export const store = configureStore({
     reducer: {
         columns: persistedColumnReducer,
         cards: persistedCardReducer,
         comments: persistedCommentReducer,
+        userName: persistedUserReducer
     },
     middleware: getDefaultMiddleware({
         serializableCheck: {

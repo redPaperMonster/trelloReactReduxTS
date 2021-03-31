@@ -4,14 +4,12 @@ import { HeaderTitle, HeaderWrapper } from './HeaderStyles';
 
 interface HeaderProps {
     userName: string,
-    onClick: () => void,
-    text: string
+    onClick: () => void
 }
 
 const Header: React.FC<HeaderProps> = ({
     userName,
-    onClick,
-    text }) => {
+    onClick }) => {
 
     return (
         <HeaderWrapper>
@@ -20,11 +18,11 @@ const Header: React.FC<HeaderProps> = ({
                 <Button
                     customStyles="margin-right: 15px;"
                     onClick={onClick}
-                    text={text} />
+                    text="+ create column" />
                 <Button
                     customStyles="margin-right: 15px;"
-                    text="clear local storage"
-                    onClick={() => localStorage.clear()} />
+                    onClick={() => localStorage.clear()}
+                    text="reset storage" />
             </div>
         </HeaderWrapper>
     )

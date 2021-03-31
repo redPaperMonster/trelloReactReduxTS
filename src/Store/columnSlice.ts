@@ -1,13 +1,12 @@
-import { createSlice, current } from '@reduxjs/toolkit';
-import { ColumnType, RootState, ColumnDataType } from '.';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { ColumnType, ColumnDataType } from '.';
 
-//`${new Date().getTime()}-TODO`
 const initialState: ColumnDataType = {
     data: [
-        { id: `1234-TODO`, title: "TODO from store", description: "TODO column" },
-        { id: `4567-In Progress`, title: "In Progress", description: "in progress column" },
-        { id: `8910-Testing`, title: "Testing", description: "testing column" },
-        { id: `3123123-Done`, title: "Done", description: "done column" }]
+        { id: nanoid(), title: "TODO", description: "TODO column" },
+        { id: nanoid(), title: "In Progress", description: "in progress column" },
+        { id: nanoid(), title: "Testing", description: "testing column" },
+        { id: nanoid(), title: "Done", description: "done column" }]
 }
 
 export const columnSlice = createSlice({
@@ -15,26 +14,23 @@ export const columnSlice = createSlice({
     initialState,
     reducers: {
         updateColumn: (state, action) => {
-            console.log(`current(state)`, current(state))
-            const newData = state.data.map((i: ColumnType) => {
+            state.data = state.data.map((i: ColumnType) => {
                 if (i.id === action.payload.id) {
                     return action.payload;
                 }
                 return i;
             })
-            return { ...state, data: newData }
         },
         addColumn: (state, action) => {
-            return { ...state, data: [...state.data, action.payload] }
+            state.data.push(action.payload);
         },
         deleteColumn: (state, action) => {
-            return { ...state, data: [...state.data.filter((i: ColumnType) => i.id !== action.payload)] }
+            state.data = state.data.filter((i: ColumnType) => i.id !== action.payload)
         },
     },
+
 });
 
-export const { updateColumn, addColumn, deleteColumn } = columnSlice.actions;
-
-export const selectColumns = (state: RootState) => state.columns.data;
+export const columnActions = columnSlice.actions;
 
 export default columnSlice.reducer;
