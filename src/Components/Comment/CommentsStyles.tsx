@@ -11,22 +11,12 @@ display:flex;
 flex-flow: row no-wrap;
 justify-content: space-between`
 
-export const CommentInfoWrapper = styled.div`
-display:flex;
-flex-flow: row no-wrap;
-justify-content: flex-start`
-
 export const ButtonWrapper = styled.div`
+flex-basis: 10%;
 `
-
-export const CommentAuthor = styled.span`
-margin-right: 50px;
-word-break: break-all;
+export const TitleWrapper = styled.div`
+flex-basis: 10%
 `
-
-export const CommentText = styled.span`
-word-break: break-all;
-`
-
-export const CommentInput = styled.input`
+export const TextWrapper = styled.div`
+flex-basis: 80%;
 `

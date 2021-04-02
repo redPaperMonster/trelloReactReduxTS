@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { CardWrapper, CardTitle, CardItem, CardButtonWrapper } from './cardsStyles';
+import { CardWrapper, CardTitle, CardItem, CardButtonWrapper, CardTitleWrapper, CommentsCountWrapper } from './cardsStyles';
 import { ModalCardInfo } from '../../Modals';
 import { Button } from '..';
-import { cardActions, CardType, stateSelectors } from '../../Store';
+import { cardActions, stateSelectors } from '../../Store';
 import { useDispatch, useSelector } from 'react-redux';
+import { CardType } from '../../Utils';
 
 interface CardProps {
   card: CardType
@@ -15,13 +16,17 @@ const Card: React.FC<CardProps> = ({
   const [showCardInfo, setShowCardInfo] = useState(false)
   const dispatch = useDispatch();
 
-  const comments = useSelector(stateSelectors.getComms(card.id));
+  const comments = useSelector(stateSelectors.getCommentsByCardId(card.id));
 
   return (
     <CardItem onClick={() => setShowCardInfo(true)}>
       <CardWrapper>
-        <CardTitle>{card.title}</CardTitle>
-        <CardTitle>✉ {comments.length}</CardTitle>
+        <CardTitleWrapper>
+          <CardTitle>{card.title}</CardTitle>
+        </CardTitleWrapper>
+        <CommentsCountWrapper>
+          <CardTitle>✉ {comments.length}</CardTitle>
+        </CommentsCountWrapper>
         <CardButtonWrapper>
           <Button
             onClick={() => dispatch(cardActions.deleteCard(card.id))}

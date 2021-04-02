@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
-import { RootState, CardType, CommentType, ColumnType } from '.';
+import { RootState } from '.';
+import { CardType, ColumnType, CommentType } from '../Utils';
 
 const store = (state: RootState) => state;
 
@@ -8,15 +9,15 @@ export const stateSelectors = {
         store,
         state => state.userName.name),
 
-    getCols: () => createSelector(
+    getColumns: () => createSelector(
         store,
         state => state.columns.data),
 
-    getCards: (id: string) => createSelector(
+    getCardsByColumnId: (id: string) => createSelector(
         store,
         (state) => state.cards.data.filter((i: CardType) => i.columnId === id)),
 
-    getComms: (id: string) => createSelector(
+    getCommentsByCardId: (id: string) => createSelector(
         store,
         (state) => state.comments.data.filter((i: CommentType) => i.cardId === id)),
 

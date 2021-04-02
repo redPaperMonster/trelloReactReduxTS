@@ -1,2 +1,3 @@
-export { default as FormInput } from "./FormInput"
-export { default as FormTextarea } from "./FormTextarea"
+export { default as FieldInput } from "./InputField"
+export { default as TextareaField } from "./TextareaField"
+export { FIStyle } from "./InputField"

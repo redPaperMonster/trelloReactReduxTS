@@ -1,5 +1,6 @@
+import { userActions } from './userSlice';
 import { createSlice, nanoid } from '@reduxjs/toolkit';
-import { ColumnType, ColumnDataType } from '.';
+import { ColumnDataType, ColumnType } from '../Utils';
 
 const initialState: ColumnDataType = {
     data: [
@@ -28,7 +29,11 @@ export const columnSlice = createSlice({
             state.data = state.data.filter((i: ColumnType) => i.id !== action.payload)
         },
     },
-
+    extraReducers: {
+        [userActions.resetStore.type]: (state) => {
+            state.data = initialState.data;
+        },
+    }
 });
 
 export const columnActions = columnSlice.actions;

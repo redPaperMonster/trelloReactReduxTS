@@ -13,7 +13,7 @@ font-size: 2em;
 text-align: center;
 word-break: break-all;`
 
-export const CardDescr = styled(CardTitle)`
+export const CardDescription = styled(CardTitle)`
 font-size: 1em;`
 
 export const CardInputWrapper = styled.div``
@@ -34,19 +34,17 @@ justify-content: space-between;`
 export const CreateCardItemWrapper = styled.div`
 flex-shrink: 1`
 
-export const CardModalDescr = styled.h5`
+export const CardModalDescription = styled.h5`
 font-size: 1em;
-word-break: break-all;
-margin: 0;`
+word-break: break-all;`
 
 export const ModalTitle = styled.h2`
 font-size: 2em;
 text-align: center;
 word-break: break-all;
-margin: 0;`;
+margin: 0;`
 
 export const CommentsWrapper = styled.div`
-
 max-height: 300px;
 overflow-y: auto;`
 

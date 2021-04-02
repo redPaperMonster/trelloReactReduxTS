@@ -11,7 +11,7 @@ export const userSlice = createSlice({
             state.name = action.payload;
             return state;
         },
-        deleteUserName: (state, action) => {
+        resetStore: (state, action) => {
             state.name = "";
             return state;
         }

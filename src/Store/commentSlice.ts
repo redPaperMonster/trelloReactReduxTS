@@ -1,6 +1,7 @@
-import { cardActions, columnActions } from '.';
-import { createSlice, current } from '@reduxjs/toolkit';
-import { RootState, CommentType, CommentDataType } from '.';
+import { cardActions } from '.';
+import { userActions } from './userSlice';
+import { createSlice } from '@reduxjs/toolkit';
+import { CommentDataType, CommentType } from '../Utils';
 
 const initialState: CommentDataType = {
     data: []
@@ -32,8 +33,12 @@ export const commentSlice = createSlice({
         },
 
         [cardActions.deleteCardByColumnId.type]: (state, action) => {
-            const q = state.data.filter((i: CommentType) => i.cardId !== action.payload)
+            //console.log(`action.payload`, action.payload)
             state.data = state.data.filter((i: CommentType) => i.cardId !== action.payload)
+        },
+
+        [userActions.resetStore.type]: (state) => {
+            state.data = initialState.data;
         },
     }
 });

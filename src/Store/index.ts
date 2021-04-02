@@ -1,12 +1,5 @@
 export type {
-    ColumnType,
-    ColumnDataType,
-    CardType,
-    CardDataType,
-    CommentType,
-    CommentDataType,
     RootState,
-
 } from "./store"
 
 export {
@@ -17,7 +10,6 @@ export {
     cardActions
 } from "./cardSlice"
 
-
 export {
     commentActions
 } from "./commentSlice"
@@ -27,3 +19,4 @@ export {
 } from "./userSlice"
 
 export { stateSelectors } from "./selectors"
+

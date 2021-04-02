@@ -1,7 +1,7 @@
 import { columnActions } from './columnSlice';
 import { createSlice } from '@reduxjs/toolkit';
-import { CardDataType } from '.';
-import { CardType } from './store';
+import { userActions } from './userSlice';
+import { CardDataType, CardType } from '../Utils';
 
 const initialState: CardDataType = {
     data: []
@@ -31,11 +31,12 @@ export const cardSlice = createSlice({
     },
     extraReducers: {
         [columnActions.deleteColumn.type]: (state, action) => {
-            state.data = state.data.filter((i: CardType) => i.columnId !== action.payload)
-        },
-        [columnActions.deleteColumn.type]: (state, action) => {
             cardSlice.caseReducers.deleteCardByColumnId(state, action)
         },
+        [userActions.resetStore.type]: (state) => {
+            state.data = initialState.data;
+        },
+
     }
 });
 export const cardActions = cardSlice.actions;

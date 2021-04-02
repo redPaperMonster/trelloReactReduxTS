@@ -5,9 +5,9 @@ import { ModalRegistration, ModalCreateColumn } from './Modals';
 import { Board } from "./AppStyles";
 import { useSelector } from 'react-redux';
 import {
-  ColumnType,
   stateSelectors
 } from './Store';
+import { ColumnType } from './Utils';
 
 function App() {
 
@@ -15,7 +15,7 @@ function App() {
 
   const userName = useSelector(stateSelectors.getUserName());
 
-  const columns: Array<ColumnType> = useSelector(stateSelectors.getCols());
+  const columns: Array<ColumnType> = useSelector(stateSelectors.getColumns());
 
   return (
     <div>

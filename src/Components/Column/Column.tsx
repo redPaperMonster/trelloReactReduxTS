@@ -2,10 +2,12 @@ import Card from '../Card/Card';
 import React, { useState } from 'react'
 import { ColumnInputWrapper, ColumnInfoWrapper, ColumnWrapper, ColumnButtonWrapper, ColumnFormWrapper } from './columnStyles';
 import { ModalCreateCard } from '../../Modals';
-import { Button, FormTextarea } from '..';
+import { Button, FieldInput } from '..';
 import { Field, Form } from 'react-final-form';
-import { CardType, ColumnType, columnActions, stateSelectors, RootState, cardActions } from '../../Store';
+import { columnActions, stateSelectors, cardActions } from '../../Store';
 import { useDispatch, useSelector } from 'react-redux';
+import { CardType, ColumnType, fieldRequired } from '../../Utils';
+
 interface ColumnProps {
   column: ColumnType
 }
@@ -19,16 +21,16 @@ const Column: React.FC<ColumnProps> = ({
 
   const [isRedacted, setRedacted] = useState<boolean>(false);
   const [showCreateCardModal, setCreateCardModal] = useState<boolean>(false)
-  const required = (value: string) => (value ? undefined : "title shouldn't be empty")
 
   const dispatch = useDispatch();
 
-  const cards = useSelector(stateSelectors.getCards(column.id))
+  const cards = useSelector(stateSelectors.getCardsByColumnId(column.id))
 
   const handleDelete = () => {
-    dispatch(columnActions.deleteColumn(column.id))
-    cards.length > 0 && dispatch(cardActions.deleteCardByColumnId(cards[0].id))
+    dispatch(columnActions.deleteColumn(column.id)) //cards[0].id
+    cards.length > 0 && dispatch(cardActions.deleteCardByColumnId(column.id))
   }
+
   const saveChanges = (values: Values) => {
     setRedacted(false);
     let newColumn: ColumnType = { id: column.id, title: values.title, description: values.description }
@@ -53,14 +55,14 @@ const Column: React.FC<ColumnProps> = ({
                     <Field
                       name="title"
                       customSize={10}
-                      validate={required}
+                      validate={fieldRequired}
                       disabled={!isRedacted}
-                      component={FormTextarea} />
+                      component={FieldInput} />
                     <Field
                       name="description"
                       customSize={10}
                       disabled={!isRedacted}
-                      component={FormTextarea} />
+                      component={FieldInput} />
                   </ColumnInputWrapper>
 
                   <ColumnButtonWrapper>

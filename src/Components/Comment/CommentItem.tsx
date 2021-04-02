@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { CommentItemWrapper, CommentInfoWrapper, ButtonWrapper, CommentInput } from './CommentsStyles';
-import { Button, FormTextarea } from ".."
+import { CommentItemWrapper, ButtonWrapper, TitleWrapper, TextWrapper } from './CommentsStyles';
+import { Button } from ".."
 import { Field, Form } from 'react-final-form';
-import { commentActions, CommentType } from '../../Store';
+import { commentActions } from '../../Store';
 import { useDispatch } from 'react-redux';
+import { CommentType, fieldRequired } from '../../Utils';
+import { FIStyle, TextareaField } from '..';
 
 interface CommentProps {
     comment: CommentType
@@ -15,8 +17,6 @@ const CommentItem: React.FC<CommentProps> = ({
     comment }) => {
 
     const [isRedacted, setRedacted] = useState<boolean>(false)
-
-    const required = (value: string) => (value ? undefined : "enter comments text")
 
     const dispatch = useDispatch();
 
@@ -30,6 +30,7 @@ const CommentItem: React.FC<CommentProps> = ({
         isRedacted ? saveChanges(values) : setRedacted(true)
     }
 
+
     return (
         <Form
             onSubmit={updateAction}
@@ -37,23 +38,20 @@ const CommentItem: React.FC<CommentProps> = ({
             {({ handleSubmit }) => (
                 <form>
                     <CommentItemWrapper>
-                        <CommentInfoWrapper>
+                        <TitleWrapper>
                             <label>{comment.author}:</label>
+                        </TitleWrapper>
+                        <TextWrapper>
                             <Field name="text"
-                                customSize={10}
-                                customStyle="
-                            min-width:350px; 
-                            &:disabled {
-                                background-color:white; 
-                                min-width:350px;
-                                text-align: start;}; "
-                                validate={required}
+                                customSize={20}
+                                bgStyle={FIStyle.modalBG}
+                                validate={fieldRequired}
                                 disabled={!isRedacted}
-                                component={FormTextarea} />
-                        </CommentInfoWrapper>
+                                component={TextareaField} />
+                        </TextWrapper>
                         <ButtonWrapper>
                             <Button
-                                customStyles="margin-right: 5px;"
+                                customStyles="margin-right: 5px; margin-bottom: 5px;"
                                 onClick={handleSubmit}
                                 text={isRedacted ? '💾' : '✎'} />
                             <Button
@@ -61,8 +59,9 @@ const CommentItem: React.FC<CommentProps> = ({
                                 text="🗑" />
                         </ButtonWrapper></CommentItemWrapper>
                 </form>
-            )}
-        </Form>
+            )
+            }
+        </Form >
 
 
 
