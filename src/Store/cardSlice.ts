@@ -26,7 +26,7 @@ export const cardSlice = createSlice({
             state.data = state.data.filter((i: CardType) => i.id !== action.payload)
         },
         deleteCardByColumnId: (state, action) => {
-            state.data = state.data.filter((i: CardType) => i.columnId !== action.payload)
+            state.data = state.data.filter((i: CardType) => i.columnId !== action.payload.columnId)
         }
     },
     extraReducers: {

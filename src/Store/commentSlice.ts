@@ -33,8 +33,11 @@ export const commentSlice = createSlice({
         },
 
         [cardActions.deleteCardByColumnId.type]: (state, action) => {
-            //console.log(`action.payload`, action.payload)
-            state.data = state.data.filter((i: CommentType) => i.cardId !== action.payload)
+            action.payload.cardsId.forEach((i: string) => {
+                state.data = state.data.filter((comment: CommentType) => comment.cardId !== i)
+                return state;
+            })
+            return state;
         },
 
         [userActions.resetStore.type]: (state) => {

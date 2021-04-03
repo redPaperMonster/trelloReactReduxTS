@@ -28,7 +28,11 @@ const Column: React.FC<ColumnProps> = ({
 
   const handleDelete = () => {
     dispatch(columnActions.deleteColumn(column.id)) //cards[0].id
-    cards.length > 0 && dispatch(cardActions.deleteCardByColumnId(column.id))
+    if (cards.length > 0) {
+      const cardIds = cards.map((i: CardType) => i.id)
+      //console.log(`cardIds`, cardIds)
+      dispatch(cardActions.deleteCardByColumnId({ columnId: column.id, cardsId: cardIds }))
+    }
   }
 
   const saveChanges = (values: Values) => {
