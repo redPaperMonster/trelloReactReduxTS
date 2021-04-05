@@ -1,3 +1,3 @@
-export { default as FieldInput } from "./InputField"
-export { default as TextareaField } from "./TextareaField"
-export { FIStyle } from "./InputField"
+export { default as InputField } from "./InputField"
+export { default as TextareaField } from "./InputTextarea"
+export { InputFieldTheme } from "./InputField"

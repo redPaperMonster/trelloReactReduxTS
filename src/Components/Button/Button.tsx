@@ -1,11 +1,10 @@
-
 import React from 'react';
 import styled from 'styled-components';
 interface ButtonProps {
-  onClick: () => void,
-  text: string,
-  customStyles?: string,
-  submit?: boolean
+  onClick: () => void;
+  text: string;
+  customStyles?: string;
+  submit?: boolean;
 }
 
 type ButtonStyleProps = {
@@ -13,28 +12,34 @@ type ButtonStyleProps = {
 };
 
 const CommonButton = styled.button<ButtonStyleProps>`
-padding: 3px 5px;
-max-height: 50px;
-font-size: 1em;
-border: none;
-border-radius: 3px;
-outline:none;
-${(props) => props.customStyle};
-&:hover {
-    background-color: lightgray;}`
+  padding: 3px 5px;
+  max-height: 50px;
+  font-size: 1em;
+  border: none;
+  border-radius: 3px;
+  outline: none;
+  ${(props) => props.css};
+  &:hover {
+    background-color: lightgray;
+  }
+`;
 
 const Button: React.FC<ButtonProps> = ({
   onClick,
   text,
   customStyles,
-  submit }) => {
-
+  submit,
+}) => {
   return (
     <CommonButton
-      customStyle={customStyles || ""}
+      css={customStyles}
+      customStyle={customStyles || ''}
       onClick={onClick}
-      type={submit ? "submit" : "button"}>{text}</CommonButton>
-  )
-}
+      type={submit ? 'submit' : 'button'}
+    >
+      {text}
+    </CommonButton>
+  );
+};
 
 export default Button;

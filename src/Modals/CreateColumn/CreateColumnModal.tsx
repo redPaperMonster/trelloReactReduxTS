@@ -3,7 +3,7 @@ import { nanoid } from '@reduxjs/toolkit';
 import React from 'react'
 import { Field, Form } from 'react-final-form';
 import { useDispatch } from 'react-redux';
-import { Modal, Button, FieldInput } from '../../Components'
+import { Modal, Button, InputField } from '../../Components'
 import { ColumnType, fieldRequired } from '../../Utils';
 import { columnActions } from '../../Store';
 import { ModalTitle, CreateColumnItemWrapper, CreateColumnWrapper } from './CreateColumnStyle'
@@ -45,13 +45,13 @@ const ModalCreateColumn: React.FC<ModalProps> = ({
                                     <Field
                                         name="title"
                                         validate={fieldRequired}
-                                        component={FieldInput} />
+                                        component={InputField} />
                                 </div>
                                 <ModalTitle>Enter column description</ModalTitle>
                                 <CreateColumnItemWrapper>
                                     <Field
                                         name="description"
-                                        component={FieldInput} />
+                                        component={InputField} />
                                 </CreateColumnItemWrapper>
                                 <CreateColumnItemWrapper>
                                     <Button

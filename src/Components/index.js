@@ -1,4 +1,4 @@
-export { FieldInput, TextareaField, FIStyle } from "./Input"
+export { InputField, TextareaField, InputFieldTheme } from "./Input"
 export { default as Button } from "./Button"
 export { default as Card } from "./Card"
 export { default as Column } from "./Column"
